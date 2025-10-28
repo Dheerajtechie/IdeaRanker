@@ -1,0 +1,12 @@
+IdeaRanker Product Brief
+=======================
+
+Ideas scored: 3
+Success probability: min=0.214 avg=0.720 max=0.992
+Total expected revenue (naive curve): $403,912.60
+Total expected profit (unit_cost=1.0): $363,521.34
+
+Recommendations
+- Prioritize ideas with prob_success >= 0.7
+- Deprioritize ideas with development time > 16 weeks unless prob_success >= 0.85
+- Use best_price as a starting point; validate with A/B tests and user research

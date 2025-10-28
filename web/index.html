@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>IdeaRanker – Live</title>
+		<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23008cff'/%3E%3Ctext x='50' y='60' font-size='56' text-anchor='middle' fill='white'%3EI%3C/text%3E%3C/svg%3E" />
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<header>
+			<h1>IdeaRanker</h1>
+			<p>Rank ideas, price them, and generate a dashboard – all client-side.</p>
+		</header>
+		<section class="controls">
+			<div class="card">
+				<h2>1) Load Model</h2>
+				<p>Use embedded model or upload your own <code>model.json</code>.</p>
+				<div class="row">
+					<button id="btn-load-default">Use Embedded Model</button>
+					<input type="file" id="file-model" accept="application/json" />
+				</div>
+				<pre id="model-status">No model loaded.</pre>
+			</div>
+			<div class="card">
+				<h2>2) Load Ideas CSV</h2>
+				<p>Upload CSV with columns: novelty_score, feasibility_score, projected_users, est_dev_weeks, prior_similar_success_rate</p>
+				<div class="row">
+					<input type="file" id="file-csv" accept="text/csv" />
+					<button id="btn-load-demo">Load Demo Ideas</button>
+					<button id="btn-download-template">Download CSV Template</button>
+				</div>
+				<pre id="csv-status">No CSV loaded.</pre>
+			</div>
+			<div class="card">
+				<h2>3) Run</h2>
+				<label>Unit cost: <input type="number" id="unit-cost" value="1" step="0.1" min="0" /></label>
+				<div class="row">
+					<button id="btn-run">Predict + Price</button>
+					<button id="btn-download">Download Pricing CSV</button>
+				</div>
+				<pre id="run-status">Idle.</pre>
+			</div>
+		</section>
+		<section class="dashboard">
+			<div class="kpis" id="kpis"></div>
+			<div class="row" style="margin-bottom:8px">
+				<label>Sort by 
+					<select id="sort-key">
+						<option value="expected_revenue">Expected Revenue</option>
+						<option value="prob_success">Prob Success</option>
+						<option value="expected_profit">Expected Profit</option>
+					</select>
+				</label>
+				<label>Order 
+					<select id="sort-order">
+						<option value="desc">Desc</option>
+						<option value="asc">Asc</option>
+					</select>
+				</label>
+				<button id="btn-apply-sort">Apply</button>
+				<div style="flex:1"></div>
+				<label>Max dev weeks: <input type="number" id="max-weeks" value="24" min="1" step="1" /></label>
+				<button id="btn-portfolio">Recommend Portfolio</button>
+			</div>
+			<table id="results-table" class="hidden">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Prob Success</th>
+						<th>Projected Users</th>
+						<th>Dev Weeks</th>
+						<th>Best Price</th>
+						<th>Expected Revenue</th>
+						<th>Expected Profit</th>
+					</tr>
+				</thead>
+				<tbody id="results-body"></tbody>
+			</table>
+			<div id="portfolio" class="card hidden" style="margin-top:12px">
+				<h3>Recommended Portfolio</h3>
+				<div id="portfolio-kpis" class="kpis"></div>
+				<table>
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Prob Success</th>
+							<th>Projected Users</th>
+							<th>Dev Weeks</th>
+							<th>Best Price</th>
+							<th>Expected Revenue</th>
+							<th>Expected Profit</th>
+						</tr>
+					</thead>
+					<tbody id="portfolio-body"></tbody>
+				</table>
+			</div>
+		</section>
+		<script src="app.js"></script>
+	</body>
+</html>
