@@ -124,10 +124,11 @@ with tab1:
 
 with tab2:
 	st.subheader("Results & Insights")
-	if 'results' not in st.session_state:
+	results_list = st.session_state.get('results', [])
+	if not results_list:
 		st.info("Run predictions in the 'Data & Model' tab.")
 	else:
-		result_rows = st.session_state['results']
+		result_rows = results_list
 		probs_list = [r["prob_success"] for r in result_rows]
 		pmin = min(probs_list) if probs_list else 0.0
 		pavg = sum(probs_list) / len(probs_list) if probs_list else 0.0
@@ -148,10 +149,11 @@ with tab2:
 
 with tab3:
 	st.subheader("Recommended Portfolio")
-	if 'results' not in st.session_state:
+	results_list = st.session_state.get('results', [])
+	if not results_list:
 		st.info("Run predictions first.")
 	else:
-		result_rows = st.session_state['results']
+		result_rows = results_list
 		def select_portfolio(items: List[Dict[str, float]], max_weeks: int) -> List[int]:
 			W = max(0, int(max_weeks))
 			n = len(items)
@@ -186,12 +188,11 @@ with tab3:
 		c4.markdown(f"<div class='kpi'><b>Total profit</b><br>${p_profit:,.2f}</div>", unsafe_allow_html=True)
 		st.dataframe(portfolio, use_container_width=True, hide_index=True)
 
-# Run pipeline when clicked in tab1
-if 'results' not in st.session_state:
-	st.session_state['results'] = None
-if 'run' not in st.session_state:
-	st.session_state['run'] = False
+# Initialize session keys safely
+if 'results' not in st.session_state or st.session_state['results'] is None:
+	st.session_state['results'] = []
 
+# Run pipeline when clicked in tab1
 if 'raws' not in locals():
 	raws = []
 
